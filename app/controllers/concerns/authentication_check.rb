@@ -7,4 +7,6 @@ module AuthenticationCheck
         status: :unauthorized
     end
   end
+  
+  include ExceptionHandler
 end

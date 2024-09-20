@@ -1,5 +1,15 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
+  skip_forgery_protection only: [:create]
+  
+  def create
+    super 
+    # Set the CSRF token cookie after successful registration
+    cookies["CSRF-TOKEN"] = form_authenticity_token
+    response.set_header('X-CSRF-Token', form_authenticity_token)
+  end
+  
+
   def destroy 
     @logged_in_user = current_user
     super 
@@ -8,10 +18,11 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(resource, _opts = {})
-    if !resource.id.nil?
-      render json: { message: 'You are logged in.' }, status: :created
+    if resource.persisted?
+      cookies["CSRF-TOKEN"] = form_authenticity_token
+      render json: { message: 'You are logged in.', csrf: form_authenticity_token }, status: :ok
     else
-      render json: { message: 'Authentication failed.'}, status: :unauthorized
+      render json: { error: 'Authentication failed.' }, status: :unauthorized
     end
   end
 
