@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'rswag/specs'
 
 RSpec.configure do |config|
   # Specify a root folder where Swagger JSON files are generated
@@ -14,7 +15,8 @@ RSpec.configure do |config|
   # By default, the operations defined in spec files are added to the first
   # document below. You can override this behavior by adding a openapi_spec tag to the
   # the root example_group in your specs, e.g. describe '...', openapi_spec: 'v2/swagger.json'
-  config.openapi_specs = {
+  config.swagger_root = Rails.root.join('swagger').to_s
+  config.swagger_docs = {
     'v1/swagger.yaml' => {
       openapi: '3.0.1',
       info: {
@@ -27,7 +29,7 @@ RSpec.configure do |config|
           url: 'https://{defaultHost}',
           variables: {
             defaultHost: {
-              default: 'www.example.com'
+              default: 'localhost:3000'
             }
           }
         }
