@@ -1,6 +1,5 @@
 require_relative "boot"
-
-require "rails"
+require "rails/all"
 # Pick the frameworks you want:
 require "active_model/railtie"
 require "active_job/railtie"
@@ -17,6 +16,11 @@ require "action_cable/engine"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
+
+require "rack/session/abstract/id"
+
+require "rswag/api"
+require "rswag/ui"
 
 module R7Rest
   class Application < Rails::Application
