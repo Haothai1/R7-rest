@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   def create
     super 
     # Set the CSRF token cookie after successful registration
-    cookies["CSRF-TOKEN"] = form_authenticity_token
+     cookies["CSRF-TOKEN"] = { value: form_authenticity_token, secure: true, same_site: :None, partitioned: true }
     response.set_header('X-CSRF-Token', form_authenticity_token)
   end
   
@@ -19,7 +19,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def respond_with(resource, _opts = {})
     if resource.persisted?
-      cookies["CSRF-TOKEN"] = form_authenticity_token
+      cookies["CSRF-TOKEN"] = { value: form_authenticity_token, secure: true, same_site: :None, partitioned: true }
       render json: { message: 'You are logged in.', csrf: form_authenticity_token }, status: :ok
     else
       render json: { error: 'Authentication failed.' }, status: :unauthorized

@@ -5,7 +5,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     # Set the CSRF token cookie after successful registration
-    cookies["CSRF-TOKEN"] = form_authenticity_token
+    cookies["CSRF-TOKEN"] = { value: form_authenticity_token, secure: true, same_site: :None, partitioned: true }
     response.set_header('X-CSRF-Token', form_authenticity_token)
   end
 
