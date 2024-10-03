@@ -13,7 +13,7 @@ class Api::V1::FactsController < ApplicationController
 
   # GET /members/:member_id/facts/:id
   def show
-    render json: @fact if check_access
+    render json: @fact
   end
 
   # POST /members/:member_id/facts
