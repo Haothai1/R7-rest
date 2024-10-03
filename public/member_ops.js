@@ -153,7 +153,29 @@ function handle_members(event) {
         }
       });
     } else if (event.target === deleteMember) {
-    // Your code goes here!
+      // Your code goes here!
+      if (confirm('Are you sure you want to delete this member?')) {
+            fetch(`/api/v1/members/${memberId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Member deleted successfully');
+                    loadMembers(); // Refresh the member list
+                } else {
+                    throw new Error('Failed to delete member');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete member');
+            });
+        }
     } else if (event.target === listFacts) {
       fetch(`${members_path}/${memberId3.value}/facts`).then((response) => {
         if (response.status === 200) {
@@ -181,8 +203,56 @@ function handle_members(event) {
       });
     } else if (event.target === createFact) {
       // Your code goes here!
+      const factText = prompt('Enter the fact text:');
+      if (factText) {
+          fetch(`/api/v1/members/${memberId}/facts`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({ fact: { fact_text: factText, likes: 0 } }),
+              credentials: 'include'
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('Fact created successfully');
+                  loadFacts(memberId); // Refresh the facts list
+              } else {
+                  throw new Error('Failed to create fact');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('Failed to create fact');
+          });
+      }
     } else if (event.target === updateFact) {
       // Your code goes here!
+      const newFactText = prompt('Enter the new fact text:');
+      if (newFactText) {
+          fetch(`/api/v1/members/${memberId}/facts/${factId}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({ fact: { fact_text: newFactText } }),
+              credentials: 'include'
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('Fact updated successfully');
+                  loadFacts(memberId); // Refresh the facts list
+              } else {
+                  throw new Error('Failed to update fact');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('Failed to update fact');
+          });
+      }
     } else if (event.target === showFact) {
       fetch(`${members_path}/${memberId6.value}/facts/${factNumber2.value}`).then(
         (response) => {
