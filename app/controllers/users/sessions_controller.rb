@@ -20,7 +20,7 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(resource, _opts = {})
     if resource.persisted?
       cookies["CSRF-TOKEN"] = { value: form_authenticity_token, secure: true, same_site: :None, partitioned: true }
-      render json: { message: 'You are logged in.', csrf: form_authenticity_token }, status: :ok
+      render json: { message: 'You are logged in.', csrf: form_authenticity_token }, status: :created
     else
       render json: { error: 'Authentication failed.' }, status: :unauthorized
     end
